@@ -1,50 +1,35 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class Server {
+
     public static void main(String[] args) {
 
-        try (ServerSocket serverSocket = new ServerSocket(3000)) {
+        try {
 
-            System.out.println("Server Running...");
+            ServerSocket ss = new ServerSocket(5000);
+            System.out.println("Server is Waiting...");
 
-            HashMap<Integer, String> students = new HashMap<>();
+            Socket s = ss.accept();
 
-            while (true) {
+            DataInputStream dis =
+                    new DataInputStream(s.getInputStream());
 
-                Socket socket = serverSocket.accept();
+            int id = dis.readInt();
+            String name = dis.readUTF();
+            int marks = dis.readInt();
 
-                BufferedReader reader =
-                        new BufferedReader(
-                                new InputStreamReader(socket.getInputStream()));
+            System.out.println("Student Information:");
+            System.out.println("ID: " + id);
+            System.out.println("Name: " + name);
+            System.out.println("Marks: " + marks);
 
-                String data = reader.readLine();
-
-                if (data != null) {
-
-                    String[] parts = data.split(",");
-
-                    int id = Integer.parseInt(parts[0]);
-                    String name = parts[1];
-                    int marks = Integer.parseInt(parts[2]);
-
-                    students.put(id, name + " , Marks = " + marks);
-
-                    System.out.println("\nStudent Records:");
-
-                    for (Integer studentId : students.keySet()) {
-                        System.out.println(
-                                "ID: " + studentId +
-                                " | " + students.get(studentId));
-                    }
-                }
-
-                socket.close();
-            }
+            dis.close();
+            s.close();
+            ss.close();
 
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println(e);
         }
     }
 }
