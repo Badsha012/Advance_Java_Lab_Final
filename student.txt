@@ -1,1 +1,3 @@
-Badsha Sheikh
+ID: 101
+Name: Badsha
+Marks: 85
